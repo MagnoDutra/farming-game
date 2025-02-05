@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
 
-    [SerializeField] private InputActionReference moveInput;
+    [SerializeField] private InputActionReference moveInput, actionInput;
     [SerializeField] private float moveSpeed = 5;
 
     private void Awake()
@@ -27,10 +27,24 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = Vector3.one;
         }
+
+        if (actionInput.action.WasPressedThisFrame())
+        {
+            UseTool();
+        }
     }
 
     private void FixedUpdate()
     {
         rb.linearVelocity = moveInput.action.ReadValue<Vector2>() * moveSpeed;
+    }
+
+    void UseTool()
+    {
+        GrowBlock block = null;
+
+        block = FindFirstObjectByType<GrowBlock>();
+
+        block?.PloughSoil();
     }
 }
