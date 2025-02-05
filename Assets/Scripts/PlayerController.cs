@@ -17,8 +17,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        rb.linearVelocity = moveInput.action.ReadValue<Vector2>() * moveSpeed;
-
         anim.SetFloat("speed", rb.linearVelocity.magnitude);
 
         if (rb.linearVelocity.x < 0f)
@@ -29,5 +27,10 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = Vector3.one;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = moveInput.action.ReadValue<Vector2>() * moveSpeed;
     }
 }
