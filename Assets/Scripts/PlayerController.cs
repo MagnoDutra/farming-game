@@ -23,47 +23,25 @@ public class PlayerController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
     }
 
+    private void Start()
+    {
+        UIController.Instance.SwitchTool((int)currentTool);
+    }
+
     void Update()
     {
         anim.SetFloat("speed", rb.linearVelocity.magnitude);
 
-        if (rb.linearVelocity.x < 0f)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-        else if (rb.linearVelocity.x > 0f)
-        {
-            transform.localScale = Vector3.one;
-        }
+        FlipCharacter();
 
-        if (Keyboard.current.tabKey.wasPressedThisFrame)
-        {
-            currentTool++;
-
-            int enumCount = Enum.GetValues(typeof(ToolType)).Length;
-
-            if ((int)currentTool >= enumCount)
-            {
-                currentTool = ToolType.Plough;
-            }
-        }
-
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
-            currentTool = ToolType.Plough;
-
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
-            currentTool = ToolType.WateringCan;
-
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
-            currentTool = ToolType.Seeds;
-
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
-            currentTool = ToolType.Basket;
+        SwitchToolOsPressKey();
 
         if (actionInput.action.WasPressedThisFrame())
         {
             UseTool();
         }
+
+
     }
 
     private void FixedUpdate()
@@ -90,4 +68,60 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
+    void FlipCharacter()
+    {
+        if (rb.linearVelocity.x < 0f)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (rb.linearVelocity.x > 0f)
+        {
+            transform.localScale = Vector3.one;
+        }
+    }
+
+    void SwitchToolOsPressKey()
+    {
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        {
+            currentTool++;
+
+            int enumCount = Enum.GetValues(typeof(ToolType)).Length;
+
+            if ((int)currentTool >= enumCount)
+            {
+                currentTool = ToolType.Plough;
+            }
+            UIController.Instance.SwitchTool((int)currentTool);
+        }
+
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            currentTool = ToolType.Plough;
+            UIController.Instance.SwitchTool((int)currentTool);
+        }
+
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            currentTool = ToolType.WateringCan;
+            UIController.Instance.SwitchTool((int)currentTool);
+        }
+
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            currentTool = ToolType.Seeds;
+            UIController.Instance.SwitchTool((int)currentTool);
+        }
+
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+
+            currentTool = ToolType.Basket;
+            UIController.Instance.SwitchTool((int)currentTool);
+        }
+    }
+
+
+
 }
