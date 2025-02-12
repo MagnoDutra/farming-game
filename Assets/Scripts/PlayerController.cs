@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private InputActionReference moveInput, actionInput;
     [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float toolWaitTime = 0.5f;
+    private float toolWaitCounter;
 
     public ToolType currentTool;
 
@@ -30,13 +32,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        anim.SetFloat("speed", rb.linearVelocity.magnitude);
+        anim.SetFloat(Constants.Animations.SPEED, rb.linearVelocity.magnitude);
 
         FlipCharacter();
 
         SwitchToolOsPressKey();
 
-        if (actionInput.action.WasPressedThisFrame())
+        if (actionInput.action.WasPressedThisFrame() && toolWaitCounter <= 0)
         {
             UseTool();
         }
@@ -46,6 +48,12 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (toolWaitCounter > 0)
+        {
+            rb.linearVelocity = Vector2.zero;
+            toolWaitCounter -= Time.deltaTime;
+            return;
+        }
         rb.linearVelocity = moveInput.action.ReadValue<Vector2>() * moveSpeed;
     }
 
@@ -55,14 +63,20 @@ public class PlayerController : MonoBehaviour
 
         block = FindFirstObjectByType<GrowBlock>();
 
+        toolWaitCounter = toolWaitTime;
+
         switch (currentTool)
         {
             case ToolType.Plough:
                 block?.PloughSoil();
+                anim.SetTrigger(Constants.Animations.PLOUGH);
                 break;
             case ToolType.WateringCan:
+                block?.WaterSoil();
+                anim.SetTrigger(Constants.Animations.WATERING);
                 break;
             case ToolType.Seeds:
+                block.PlantCrop();
                 break;
             case ToolType.Basket:
                 break;
@@ -102,19 +116,19 @@ public class PlayerController : MonoBehaviour
             UIController.Instance.SwitchTool((int)currentTool);
         }
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        if (Keyboard.current.digit2Key.wasPressedThisFrame)
         {
             currentTool = ToolType.WateringCan;
             UIController.Instance.SwitchTool((int)currentTool);
         }
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        if (Keyboard.current.digit3Key.wasPressedThisFrame)
         {
             currentTool = ToolType.Seeds;
             UIController.Instance.SwitchTool((int)currentTool);
         }
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        if (Keyboard.current.digit4Key.wasPressedThisFrame)
         {
 
             currentTool = ToolType.Basket;
