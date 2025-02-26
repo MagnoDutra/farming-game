@@ -30,6 +30,13 @@ public class GrowBlock : MonoBehaviour
         // {
         //     AdvanceStage();
         // }
+
+#if UNITY_EDITOR
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            AdvanceCrop();
+        }
+#endif
     }
 
     public void AdvanceStage()
@@ -113,6 +120,21 @@ public class GrowBlock : MonoBehaviour
             case GrowthStage.Ripe:
                 cropSR.sprite = cropRipe;
                 break;
+        }
+    }
+
+    public void AdvanceCrop()
+    {
+        if (isWatered == true)
+        {
+            if (stage == GrowthStage.Planted || stage == GrowthStage.Growing1 || stage == GrowthStage.Growing2)
+            {
+                stage++;
+
+                isWatered = false;
+                UpdateSprite();
+                UpdateCropSprite();
+            }
         }
     }
 }
