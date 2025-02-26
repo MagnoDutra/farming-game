@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GridController : MonoBehaviour
@@ -7,6 +8,8 @@ public class GridController : MonoBehaviour
 
     private Vector2Int gridSize;
     private Vector3 offset;
+
+    public List<BlockRow> blockRows = new();
 
     void Start()
     {
@@ -30,14 +33,16 @@ public class GridController : MonoBehaviour
         gridSize = new Vector2Int(Mathf.RoundToInt(maxPoint.position.x - minPoint.position.x),
             Mathf.RoundToInt(maxPoint.position.y - minPoint.position.y));
 
-        for (int x = 0; x < gridSize.x; x++)
+        for (int y = 0; y < gridSize.y; y++)
         {
-            for (int y = 0; y < gridSize.y; y++)
+            blockRows.Add(new BlockRow());
+            for (int x = 0; x < gridSize.x; x++)
             {
                 Vector3 pos = startPos + new Vector3(x, y, 0);
                 GrowBlock newBlock = Instantiate(baseGridBlock, pos, Quaternion.identity);
 
-                newBlock.transform.SetParent(this.transform);
+                newBlock.transform.SetParent(transform);
+                blockRows[y].row.Add(newBlock);
             }
         }
 
