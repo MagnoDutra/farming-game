@@ -11,6 +11,8 @@ public class GridController : MonoBehaviour
 
     public List<BlockRow> blockRows = new();
 
+    public LayerMask gridBlockers;
+
     void Start()
     {
         offset = new Vector3(0.5f, 0.5f, 0);
@@ -43,6 +45,12 @@ public class GridController : MonoBehaviour
 
                 newBlock.transform.SetParent(transform);
                 blockRows[y].row.Add(newBlock);
+
+                if (Physics2D.OverlapBox(newBlock.transform.position, new Vector2(0.9f, 0.9f), 0f, gridBlockers))
+                {
+                    newBlock.sr.sprite = null;
+                    newBlock.preventUse = true;
+                }
             }
         }
 

@@ -11,13 +11,15 @@ public enum GrowthStage
 public class GrowBlock : MonoBehaviour
 {
     public GrowthStage stage;
-    private SpriteRenderer sr;
+    public SpriteRenderer sr;
     [SerializeField] private SpriteRenderer cropSR;
     [SerializeField] private Sprite cropPlanted, cropGrowing1, cropGrowing2, cropRipe;
     [SerializeField] Sprite soilTilled;
     [SerializeField] Sprite soilWatered;
 
     private bool isWatered;
+    public bool preventUse;
+
 
     void Start()
     {
@@ -26,6 +28,10 @@ public class GrowBlock : MonoBehaviour
 
     void Update()
     {
+        if (preventUse)
+        {
+            this.enabled = false;
+        }
         // if (Keyboard.current.eKey.wasPressedThisFrame)
         // {
         //     AdvanceStage();
@@ -83,7 +89,7 @@ public class GrowBlock : MonoBehaviour
 
     public void PloughSoil()
     {
-        if (stage == GrowthStage.Barren)
+        if (stage == GrowthStage.Barren && !preventUse)
         {
             AdvanceStage();
         }
@@ -91,13 +97,14 @@ public class GrowBlock : MonoBehaviour
 
     public void WaterSoil()
     {
+        if (preventUse) return;
         isWatered = true;
         SetSoilSprite();
     }
 
     public void PlantCrop()
     {
-        if (stage == GrowthStage.Ploughed && isWatered)
+        if (stage == GrowthStage.Ploughed && isWatered && !preventUse)
         {
             stage = GrowthStage.Planted;
             UpdateCropSprite();
@@ -125,7 +132,7 @@ public class GrowBlock : MonoBehaviour
 
     public void AdvanceCrop()
     {
-        if (isWatered == true)
+        if (isWatered == true && !preventUse)
         {
             if (stage == GrowthStage.Planted || stage == GrowthStage.Growing1 || stage == GrowthStage.Growing2)
             {
@@ -140,7 +147,7 @@ public class GrowBlock : MonoBehaviour
 
     public void HarvestCrop()
     {
-        if (stage == GrowthStage.Ripe)
+        if (stage == GrowthStage.Ripe && !preventUse)
         {
             stage = GrowthStage.Ploughed;
             SetSoilSprite();
