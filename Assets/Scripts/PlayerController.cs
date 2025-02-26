@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
                 block.PlantCrop();
                 break;
             case ToolType.Basket:
+                block.HarvestCrop();
                 break;
         }
     }

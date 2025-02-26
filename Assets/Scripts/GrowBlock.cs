@@ -50,10 +50,10 @@ public class GrowBlock : MonoBehaviour
             stage = GrowthStage.Barren;
         }
 
-        UpdateSprite();
+        SetSoilSprite();
     }
 
-    void UpdateSprite()
+    void SetSoilSprite()
     {
         switch (stage)
         {
@@ -92,7 +92,7 @@ public class GrowBlock : MonoBehaviour
     public void WaterSoil()
     {
         isWatered = true;
-        UpdateSprite();
+        SetSoilSprite();
     }
 
     public void PlantCrop()
@@ -132,9 +132,19 @@ public class GrowBlock : MonoBehaviour
                 stage++;
 
                 isWatered = false;
-                UpdateSprite();
+                SetSoilSprite();
                 UpdateCropSprite();
             }
+        }
+    }
+
+    public void HarvestCrop()
+    {
+        if (stage == GrowthStage.Ripe)
+        {
+            stage = GrowthStage.Ploughed;
+            SetSoilSprite();
+            cropSR.sprite = null;
         }
     }
 }
