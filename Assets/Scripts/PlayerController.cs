@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5;
     [SerializeField] private float toolWaitTime = 0.5f;
     [SerializeField] private Transform toolIndicator;
+    [SerializeField] private float toolRange = 3f;
+
     private float toolWaitCounter;
 
     public ToolType currentTool;
@@ -63,6 +65,18 @@ public class PlayerController : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mousePos.z = 0;
         toolIndicator.position = mousePos;
+
+        if (Vector3.Distance(toolIndicator.position, transform.position) > toolRange)
+        {
+            // Limita a distancia da ferramenta
+            Vector2 direction = toolIndicator.position - transform.position;
+            direction = direction.normalized * toolRange;
+            toolIndicator.position = transform.position + new Vector3(direction.x, direction.y, 0f);
+        }
+
+        // faz o indicador ficar nos grids certinho mas ainda precisa de um offset
+        toolIndicator.position = new Vector3(Mathf.FloorToInt(toolIndicator.position.x) + .5f,
+            Mathf.FloorToInt(toolIndicator.position.y) + .5f, 0f);
     }
 
     void UseTool()
