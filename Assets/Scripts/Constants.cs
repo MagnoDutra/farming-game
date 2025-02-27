@@ -6,4 +6,9 @@ public static class Constants
         public const string WATERING = "water";
         public const string SPEED = "speed";
     }
+
+    public static class Tags
+    {
+        public const string PLAYER = "Player";
+    }
 }
