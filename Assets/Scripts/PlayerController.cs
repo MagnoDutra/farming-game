@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputActionReference moveInput, actionInput;
     [SerializeField] private float moveSpeed = 5;
     [SerializeField] private float toolWaitTime = 0.5f;
+    [SerializeField] private Transform toolIndicator;
     private float toolWaitCounter;
 
     public ToolType currentTool;
@@ -55,6 +56,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
         rb.linearVelocity = moveInput.action.ReadValue<Vector2>() * moveSpeed;
+    }
+
+    void LateUpdate()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        mousePos.z = 0;
+        toolIndicator.position = mousePos;
     }
 
     void UseTool()
