@@ -3809,6 +3809,7 @@ MonoBehaviour:
   moveSpeed: 8
   toolWaitTime: 0.5
   toolIndicator: {fileID: 1801908950}
+  toolRange: 3
   currentTool: 0
 --- !u!70 &234085748
 CapsuleCollider2D:
